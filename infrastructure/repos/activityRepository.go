@@ -19,6 +19,13 @@ func NewActivityRepository(db *database.MysqlDb) interfaces.ActivityRepository {
 func (a *activityRepository) GetAll(param types.Activity) []types.Activity {
 	var activities []types.Activity
 
+	if param.TipAktivnosti == "Teretana" {
+		a.db.Db.Table(param.TipAktivnosti).Select("teretana.*, vezba.*").
+			Where("programId = ?", param.ProgramId).Joins("join vezba on teretana.vezbaId = vezba.vezbaId").
+			Scan(&activities)
+
+		return activities
+	}
 	a.db.Db.Table(param.TipAktivnosti).Where("programId = ?", param.ProgramId).Find(&activities)
 
 	return activities

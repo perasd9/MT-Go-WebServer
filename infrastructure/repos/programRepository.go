@@ -16,6 +16,9 @@ func NewProgramRepository(db *database.MysqlDb) interfaces.ProgramRepository {
 	}
 }
 
+// TO FOLLOW FULLY CLEAN ARCHITECTURE AND SOLID PRIN. RIGHT WAY IS TO LIFT UP THIS WHOLE LOGIC IN USECASE
+// AND JUST CALL REPOSITORY YOU NEED FOR LOGIC BUT NOT IN REPOSITORY WORK WITH 2 TABLES
+// THIS CRASHING SINGLE RESPONSIBILITY IN SOLID PRINCIPLES
 func (p *programRepository) Add(param types.Program) {
 	// var tip_programa []types.Program
 

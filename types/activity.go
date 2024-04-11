@@ -10,14 +10,13 @@ type Activity struct {
 	BrojKalorija int    `gorm:"<-:false;column:brojKalorija"`
 
 	//gym
-	BrojSerija string   `gorm:"<-:false;column:brojSerija"`
+	BrojSerija int      `gorm:"<-:false;column:brojSerija"`
 	Kilaza     float64  `gorm:"<-:false;column:kilaza"`
 	VezbaId    int      `gorm:"<-:false;column:vezbaId"`
 	Vezba      Exercise `gorm:"-"`
-
 	//supplement
 	//Naziv     string `gorm:"column:naziv"`
-	Kolicina string `gorm:"<-:false;column:kolicina"`
+	Kolicina float64 `gorm:"<-:false;column:kolicina"`
 
 	//string helper
 	TipAktivnosti string `gorm:"column:activityType" json:"activityType"`

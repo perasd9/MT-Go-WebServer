@@ -111,7 +111,7 @@ func (mts *MTServer) Start() {
 			defer wg.Done()
 
 			//Actual handling request
-			time.Sleep(500 * time.Millisecond)
+			time.Sleep(800 * time.Millisecond)
 			handleConnection(conn, mts.router)
 		}()
 		wg.Wait()

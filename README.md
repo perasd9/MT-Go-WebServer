@@ -4,7 +4,9 @@ This is a custom web server implemented in Go language. It's a TCP server where 
 
 ## Clone the project
 
+```bash
 $ git clone https://github.com/perasd9/MT-GoWebServer.git
+```
 
 For starting backend you need type in console 'go mod tidy' to get all packages.
 After that you just can start backend with 'go run main.go'.

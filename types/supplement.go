@@ -5,7 +5,7 @@ type Supplement struct {
 	ProgramId     int `gorm:"column:programId"`
 	Program       Program
 	Naziv         string   `gorm:"column:naziv"`
-	Kolicina      string   `gorm:"column:kolicina"`
+	Kolicina      float64  `gorm:"column:kolicina"`
 	Activity      Activity `gorm:"-"`
-	TipAktivnosti string   `json:"activityType"`
+	TipAktivnosti string   `gorm:"-" json:"activityType"`
 }
