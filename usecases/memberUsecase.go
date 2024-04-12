@@ -21,4 +21,5 @@ func (p *memberUsecase) Login(member types.Member) types.Member {
 }
 
 func (p *memberUsecase) Add(member types.Member) {
+	p.memberRepository.Add(member)
 }

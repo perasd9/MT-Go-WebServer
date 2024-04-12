@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	handlers "github/perasd9/MTWebServer/handlers/serverHandlers"
 	"github/perasd9/MTWebServer/usecases/interfaces"
 )
 
@@ -21,5 +22,5 @@ func (p *exerciseHandler) GetAll(param string) string {
 
 	v, _ := json.Marshal(types)
 
-	return string(v)
+	return handlers.NewResponse().Ok(string(v))
 }

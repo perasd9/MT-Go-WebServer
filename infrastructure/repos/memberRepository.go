@@ -17,7 +17,7 @@ func NewMemberRepository(db *database.MysqlDb) interfaces.MemberRepository {
 }
 
 func (p *memberRepository) Add(member types.Member) {
-
+	p.db.Db.Table("clan").Create(&member)
 }
 
 func (p *memberRepository) Login(member types.Member) types.Member {

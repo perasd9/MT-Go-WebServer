@@ -3,6 +3,7 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
+	handlers "github/perasd9/MTWebServer/handlers/serverHandlers"
 	"github/perasd9/MTWebServer/types"
 	"github/perasd9/MTWebServer/usecases/interfaces"
 )
@@ -34,7 +35,7 @@ func (p *programHandler) Add(param string) string {
 
 	p.programUsecase.Add(program)
 
-	return "ok"
+	return handlers.NewResponse().Created("")
 }
 
 func (p *programHandler) GetAll(param string) string {

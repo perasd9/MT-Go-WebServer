@@ -3,6 +3,7 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
+	handlers "github/perasd9/MTWebServer/handlers/serverHandlers"
 	"github/perasd9/MTWebServer/types"
 	"github/perasd9/MTWebServer/usecases/interfaces"
 )
@@ -28,27 +29,34 @@ func (p *memberHandler) Login(param string) string {
 	err := json.Unmarshal(byted, &member)
 
 	if err != nil {
-		return err.Error()
+		return handlers.NewResponse().BadRequest(err.Error())
 	}
 
 	mem := p.memberUsecase.Login(member)
 
 	if mem.ClanId != 0 {
 		v, _ := json.Marshal(mem)
-		return string(v)
+		return handlers.NewResponse().Ok(string(v))
 
 	} else {
-		return ""
+		return handlers.NewResponse().BadRequest("Pogresni kredencijali")
 	}
 
 }
 
 func (p *memberHandler) Add(param string) string {
+	var member types.Member
 
-	// types := p.memberUsecase.Add()
+	byted := []byte(param)
 
-	// v, _ := json.Marshal(types)
+	byted = bytes.Trim(byted, "\x00")
 
-	// return string(v)
-	return ""
+	err := json.Unmarshal(byted, &member)
+
+	if err != nil {
+		return err.Error()
+	}
+	p.memberUsecase.Add(member)
+
+	return handlers.NewResponse().Created("")
 }

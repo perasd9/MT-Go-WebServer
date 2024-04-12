@@ -123,7 +123,7 @@ func handleConnection(conn net.Conn, router *Router) {
 	defer conn.Close()
 
 	//Inital response if everything goes bad
-	response := handlers.NewResponse().NotFound("")
+	responseJson := handlers.NewResponse().NotFound("")
 
 	writer := io.Writer(conn)
 
@@ -142,15 +142,10 @@ func handleConnection(conn net.Conn, router *Router) {
 		return
 	}
 	//Handling pure request by routing that request into supported handler
-	responseJson, successfull := router.Handle(request)
-
-	//Returnin successfull response
-	if successfull {
-		response = handlers.NewResponse().Ok(responseJson)
-	}
+	responseJson, _ = router.Handle(request)
 
 	//Write response back
-	writer.Write([]byte(response))
+	writer.Write([]byte(responseJson))
 }
 
 func readBuffer(conn net.Conn) []byte {
