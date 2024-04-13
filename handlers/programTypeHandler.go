@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	handlers "github/perasd9/MTWebServer/handlers/serverHandlers"
 	"github/perasd9/MTWebServer/usecases/interfaces"
 )
 
@@ -19,7 +20,11 @@ func (p *programTypeHandler) GetAll(param string) string {
 
 	types := p.programTypeUsecase.GetAll()
 
-	v, _ := json.Marshal(types)
+	v, err := json.MarshalIndent(types, "", "   ")
 
-	return string(v)
+	if err != nil {
+		return handlers.NewResponse().BadRequest(string(err.Error()))
+	}
+
+	return handlers.NewResponse().Ok(string(v))
 }

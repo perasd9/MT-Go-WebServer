@@ -19,7 +19,6 @@ func NewProgramHandler(usecase interfaces.ProgramUsecase) *programHandler {
 }
 
 func (p *programHandler) Add(param string) string {
-
 	var program types.Program
 
 	byted := []byte(param)
@@ -29,9 +28,8 @@ func (p *programHandler) Add(param string) string {
 	err := json.Unmarshal(byted, &program)
 
 	if err != nil {
-		return err.Error()
+		return handlers.NewResponse().BadRequest(err.Error())
 	}
-	// _, _ := json.Marshal(program)
 
 	p.programUsecase.Add(program)
 
@@ -39,22 +37,25 @@ func (p *programHandler) Add(param string) string {
 }
 
 func (p *programHandler) GetAll(param string) string {
+	var program types.Program
 
-	var datum string
-	for i := 0; i < len(param); i++ {
-		if param[i] == '2' && param[i+1] == '0' {
-			for j := i; j < len(param); j++ {
-				if param[j] != '"' && param[j] != '}' {
-					datum += string(param[j])
-				}
-			}
-			break
-		}
+	byted := []byte(param)
+
+	byted = bytes.Trim(byted, "\x00")
+
+	err := json.Unmarshal(byted, &program)
+
+	if err != nil {
+		return handlers.NewResponse().BadRequest(err.Error())
 	}
 
-	programs := p.programUsecase.GetAll(datum)
+	programs := p.programUsecase.GetAll(program.Datum.String())
 
-	jsonPrograms, _ := json.Marshal(programs)
+	jsonPrograms, err := json.MarshalIndent(programs, "", "   ")
 
-	return string(jsonPrograms)
+	if err != nil {
+		return handlers.NewResponse().BadRequest(string(err.Error()))
+	}
+
+	return handlers.NewResponse().Ok(string(jsonPrograms))
 }

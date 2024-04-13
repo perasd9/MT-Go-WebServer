@@ -122,9 +122,6 @@ func (mts *MTServer) Start() {
 func handleConnection(conn net.Conn, router *Router) {
 	defer conn.Close()
 
-	//Inital response if everything goes bad
-	responseJson := handlers.NewResponse().NotFound("")
-
 	writer := io.Writer(conn)
 
 	buffer := readBuffer(conn)
@@ -142,7 +139,7 @@ func handleConnection(conn net.Conn, router *Router) {
 		return
 	}
 	//Handling pure request by routing that request into supported handler
-	responseJson, _ = router.Handle(request)
+	responseJson, _ := router.Handle(request)
 
 	//Write response back
 	writer.Write([]byte(responseJson))

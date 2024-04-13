@@ -35,7 +35,7 @@ func (r *Response) Created(data string) string {
 func (r *Response) BadRequest(data string) string {
 	status := "HTTP/1.1 400 Bad Request"
 
-	return fmt.Sprintf("%v\r\n\r\n", status)
+	return r.makeResponse(status, data)
 }
 
 //404 not found http response

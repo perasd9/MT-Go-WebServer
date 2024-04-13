@@ -44,7 +44,7 @@ func (r *Router) Handle(request *handlers.Request) (string, bool) {
 	}
 
 	//Calling actual handler support for route
-	return "", false
+	return handlers.NewResponse().NotFound(""), false
 }
 
 // Adding route to all defined routes of our API

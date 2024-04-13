@@ -20,7 +20,11 @@ func (p *exerciseHandler) GetAll(param string) string {
 
 	types := p.exerciseUsecase.GetAll()
 
-	v, _ := json.Marshal(types)
+	v, err := json.MarshalIndent(types, "", "   ")
+
+	if err != nil {
+		return handlers.NewResponse().BadRequest(string(err.Error()))
+	}
 
 	return handlers.NewResponse().Ok(string(v))
 }

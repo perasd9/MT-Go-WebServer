@@ -35,7 +35,12 @@ func (p *memberHandler) Login(param string) string {
 	mem := p.memberUsecase.Login(member)
 
 	if mem.ClanId != 0 {
-		v, _ := json.Marshal(mem)
+		v, err := json.MarshalIndent(mem, "", "   ")
+
+		if err != nil {
+			return handlers.NewResponse().BadRequest(string(err.Error()))
+		}
+
 		return handlers.NewResponse().Ok(string(v))
 
 	} else {
@@ -54,7 +59,7 @@ func (p *memberHandler) Add(param string) string {
 	err := json.Unmarshal(byted, &member)
 
 	if err != nil {
-		return err.Error()
+		return handlers.NewResponse().BadRequest(err.Error())
 	}
 	p.memberUsecase.Add(member)
 
