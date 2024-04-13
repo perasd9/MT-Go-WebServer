@@ -7,3 +7,7 @@ type Member struct {
 	Email   string `gorm:"column:email"`
 	Lozinka string `gorm:"column:lozinka"`
 }
+
+func (Member) TableName() string {
+	return "clan"
+}

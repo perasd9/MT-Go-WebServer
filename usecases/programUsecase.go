@@ -42,3 +42,23 @@ func (p *programUsecase) GetAll(datum string) []types.Program {
 
 	return programs
 }
+
+func (p *programUsecase) GetAllPrivatePrograms(datum string) []types.Program {
+
+	programs := p.programRepository.GetAllPrivatePrograms(datum)
+
+	for i, value := range programs {
+		var activities []types.Activity
+		var concreteActivities []types.Activity
+
+		activities = p.activityRepository.GetAllDistinct(strconv.Itoa(value.ProgramId))
+
+		for _, activityValue := range activities {
+			concreteActivities = p.activityRepository.GetAll(activityValue)
+
+		}
+		programs[i].ListaAktivnosti = concreteActivities
+	}
+
+	return programs
+}

@@ -59,3 +59,27 @@ func (p *programHandler) GetAll(param string) string {
 
 	return handlers.NewResponse().Ok(string(jsonPrograms))
 }
+
+func (p *programHandler) GetAllPrivatePrograms(param string) string {
+	var program types.Program
+
+	byted := []byte(param)
+
+	byted = bytes.Trim(byted, "\x00")
+
+	err := json.Unmarshal(byted, &program)
+
+	if err != nil {
+		return handlers.NewResponse().BadRequest(err.Error())
+	}
+
+	programs := p.programUsecase.GetAllPrivatePrograms(program.Datum.String())
+
+	jsonPrograms, err := json.MarshalIndent(programs, "", "   ")
+
+	if err != nil {
+		return handlers.NewResponse().BadRequest(string(err.Error()))
+	}
+
+	return handlers.NewResponse().Ok(string(jsonPrograms))
+}
