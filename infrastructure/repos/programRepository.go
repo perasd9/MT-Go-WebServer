@@ -66,7 +66,7 @@ func (p *programRepository) GetAll(datum string) []types.Program {
 	// p.db.Db.Model(types.Program{}).Select("program.*, clan.*").Where("datum = ?", datum).
 	// 	Joins("left join clan on program.clanId = clan.clanId").Preload("Clan").Find(&programs)
 
-	p.db.Db.Table("program").Where("datum = ?", datum).Find(&programs)
+	p.db.Db.Table("program").Where("datum = ? and public = ?", datum, true).Find(&programs)
 
 	for index, value := range programs {
 		var clan types.Member
@@ -78,10 +78,10 @@ func (p *programRepository) GetAll(datum string) []types.Program {
 	return programs
 }
 
-func (p *programRepository) GetAllPrivatePrograms(datum string) []types.Program {
+func (p *programRepository) GetAllPrivatePrograms(param types.Program) []types.Program {
 	var programs []types.Program
 
-	p.db.Db.Table("program").Where("datum = ? and public = ?", datum, false).Find(&programs)
+	p.db.Db.Table("program").Where("datum = ? and clanId = ?", param.Datum.String(), param.ClanId).Find(&programs)
 
 	return programs
 }

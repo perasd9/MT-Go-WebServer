@@ -73,7 +73,7 @@ func (p *programHandler) GetAllPrivatePrograms(param string) string {
 		return handlers.NewResponse().BadRequest(err.Error())
 	}
 
-	programs := p.programUsecase.GetAllPrivatePrograms(program.Datum.String())
+	programs := p.programUsecase.GetAllPrivatePrograms(program)
 
 	jsonPrograms, err := json.MarshalIndent(programs, "", "   ")
 

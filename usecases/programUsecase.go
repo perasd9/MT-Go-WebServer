@@ -43,9 +43,9 @@ func (p *programUsecase) GetAll(datum string) []types.Program {
 	return programs
 }
 
-func (p *programUsecase) GetAllPrivatePrograms(datum string) []types.Program {
+func (p *programUsecase) GetAllPrivatePrograms(param types.Program) []types.Program {
 
-	programs := p.programRepository.GetAllPrivatePrograms(datum)
+	programs := p.programRepository.GetAllPrivatePrograms(param)
 
 	for i, value := range programs {
 		var activities []types.Activity
