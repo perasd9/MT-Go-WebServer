@@ -23,7 +23,7 @@ func (p *memberRepository) Add(member types.Member) {
 func (p *memberRepository) Login(member types.Member) types.Member {
 	var mem types.Member
 
-	p.db.Db.Table("clan").Where("email = ? and lozinka = ?", member.Email, member.Lozinka).Find(&mem)
+	p.db.Db.Table("clan").Where("email = ?", member.Email).Find(&mem)
 
 	return mem
 }

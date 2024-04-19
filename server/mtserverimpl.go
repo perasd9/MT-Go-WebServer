@@ -14,7 +14,6 @@ import (
 	"runtime"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/joho/godotenv"
 )
@@ -103,7 +102,7 @@ func (mts *MTServer) Start() {
 
 		if err != nil {
 			fmt.Println("Error accepting connection ", err.Error())
-			return
+			break
 		}
 
 		//Adding into synchronized group
@@ -112,11 +111,10 @@ func (mts *MTServer) Start() {
 			defer wg.Done()
 
 			//Actual handling request
-			time.Sleep(800 * time.Millisecond)
 			handleConnection(conn, mts.router)
 		}()
-		wg.Wait()
 	}
+	wg.Wait()
 }
 
 // Function for handling requests
@@ -126,6 +124,9 @@ func handleConnection(conn net.Conn, router *Router) {
 	writer := io.Writer(conn)
 
 	buffer := readBuffer(conn)
+	buffer = bytes.Trim(buffer, "\x00")
+
+	print("**********" + string(buffer) + "***********\n")
 
 	if len(strings.TrimSpace(string(buffer))) == 0 {
 		fmt.Println("Empty request received")
@@ -148,21 +149,33 @@ func handleConnection(conn net.Conn, router *Router) {
 
 func readBuffer(conn net.Conn) []byte {
 	//Init reader and writer for buffers
-	reader := io.Reader(conn)
 
-	buffer := make([]byte, 8192)
+	//Init reader and writer for buffers
+	buf := make([]byte, 8192)
+	msg := make([]byte, 8192)
 
-	//Reading input buffer
-	_, err := reader.Read(buffer)
+	for {
+		line, err := conn.Read(buf)
 
-	if err != nil {
-		fmt.Println("Error reading request buffer: ", err.Error())
-		return buffer
+		if err != nil {
+			continue
+		}
+		buf = bytes.Trim(buf, "\x00")
+
+		msg = append(msg, buf[:line]...)
+
+		if strings.Contains(string(msg), "}") {
+			break
+		}
+
+		if bytes.Contains(msg, []byte("content-length")) {
+			continue
+		}
+
+		if bytes.Contains(msg, []byte("\x00")) {
+			break
+		}
 	}
 
-	print("**********" + string(buffer) + "***********")
-
-	buffer = bytes.Trim(buffer, "\x00")
-
-	return buffer
+	return msg
 }
