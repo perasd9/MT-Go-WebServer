@@ -62,3 +62,8 @@ func (p *programUsecase) GetAllPrivatePrograms(param types.Program) []types.Prog
 
 	return programs
 }
+
+func (p *programUsecase) Delete(param int) {
+	p.activityRepository.Delete(param)
+	p.programRepository.Delete(param)
+}

@@ -85,3 +85,7 @@ func (p *programRepository) GetAllPrivatePrograms(param types.Program) []types.P
 
 	return programs
 }
+
+func (p *programRepository) Delete(param int) {
+	p.db.Db.Table("program").Where("programId = ?", param).Delete(param)
+}

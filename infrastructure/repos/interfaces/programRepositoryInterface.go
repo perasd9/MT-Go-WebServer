@@ -6,4 +6,5 @@ type ProgramRepository interface {
 	Add(types.Program)
 	GetAll(datum string) []types.Program
 	GetAllPrivatePrograms(param types.Program) []types.Program
+	Delete(param int)
 }

@@ -38,3 +38,11 @@ func (a *activityRepository) GetAllDistinct(param string) []types.Activity {
 
 	return activities
 }
+
+func (a *activityRepository) Delete(param int) {
+	var activities []types.Activity
+
+	a.db.Db.Table("aktivnost").Where("programId = ?", param).Distinct("programId, activityType").Find(&activities)
+	a.db.Db.Table(activities[0].TipAktivnosti).Where("programId = ?", param).Delete(param)
+	a.db.Db.Table("aktivnost").Where("programId = ?", param).Delete(param)
+}

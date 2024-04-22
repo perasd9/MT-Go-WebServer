@@ -89,6 +89,7 @@ func (mts *MTServer) Start() {
 
 	//Defining all possible routes by our API
 	mts.router.AddRoute(*handlers.NewRoute("/programTypes", "GET"), programTypeHandler.GetAll)
+	mts.router.AddRoute(*handlers.NewRoute("/programs", "DELETE"), programHandler.Delete)
 	mts.router.AddRoute(*handlers.NewRoute("/programs", "POST"), programHandler.GetAll)
 	mts.router.AddRoute(*handlers.NewRoute("/privateprograms", "POST"), programHandler.GetAllPrivatePrograms)
 	mts.router.AddRoute(*handlers.NewRoute("/program", "POST"), programHandler.Add)
