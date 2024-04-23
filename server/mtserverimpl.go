@@ -91,6 +91,7 @@ func (mts *MTServer) Start() {
 	mts.router.AddRoute(*handlers.NewRoute("/programTypes", "GET"), programTypeHandler.GetAll)
 	mts.router.AddRoute(*handlers.NewRoute("/programs", "DELETE"), programHandler.Delete)
 	mts.router.AddRoute(*handlers.NewRoute("/programs", "POST"), programHandler.GetAll)
+	mts.router.AddRoute(*handlers.NewRoute("/programs", "PUT"), programHandler.Update)
 	mts.router.AddRoute(*handlers.NewRoute("/privateprograms", "POST"), programHandler.GetAllPrivatePrograms)
 	mts.router.AddRoute(*handlers.NewRoute("/program", "POST"), programHandler.Add)
 	mts.router.AddRoute(*handlers.NewRoute("/exercises", "GET"), exerciseHandler.GetAll)
@@ -161,19 +162,22 @@ func readBuffer(conn net.Conn) []byte {
 		if err != nil {
 			continue
 		}
-		buf = bytes.Trim(buf, "\x00")
-
 		msg = append(msg, buf[:line]...)
 
-		if strings.Contains(string(msg), "}") {
+		if bytes.Contains(buf, []byte("}\x00\x00\x00")) {
 			break
 		}
 
-		if bytes.Contains(msg, []byte("content-length")) {
+		if bytes.Contains(buf, []byte("content-length")) {
+
+			if bytes.Contains(buf, []byte("}")) {
+				break
+			}
 			continue
 		}
 
-		if bytes.Contains(msg, []byte("\x00")) {
+		if bytes.Contains(buf, []byte("\x00")) {
+
 			break
 		}
 	}

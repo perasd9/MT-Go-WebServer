@@ -16,6 +16,18 @@ func NewProgramRepository(db *database.MysqlDb) interfaces.ProgramRepository {
 	}
 }
 
+func (p *programRepository) BeginTransaction() {
+	p.db.Db.Begin()
+}
+
+func (p *programRepository) Commit() {
+	p.db.Db.Commit()
+}
+
+func (p *programRepository) Rollback() {
+	p.db.Db.Rollback()
+}
+
 // TO FOLLOW FULLY CLEAN ARCHITECTURE AND SOLID PRIN. RIGHT WAY IS TO LIFT UP THIS WHOLE LOGIC IN USECASE
 // AND JUST CALL REPOSITORY YOU NEED FOR LOGIC BUT NOT IN REPOSITORY WORK WITH 2 TABLES
 // THIS CRASHING SINGLE RESPONSIBILITY IN SOLID PRINCIPLES
@@ -88,4 +100,8 @@ func (p *programRepository) GetAllPrivatePrograms(param types.Program) []types.P
 
 func (p *programRepository) Delete(param int) {
 	p.db.Db.Table("program").Where("programId = ?", param).Delete(param)
+}
+
+func (p *programRepository) Update(param types.Program) {
+	p.db.Db.Table("program").Where("programId = ?", param.ProgramId).Update("public", param.Public)
 }

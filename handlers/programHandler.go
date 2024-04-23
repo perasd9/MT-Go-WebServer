@@ -101,3 +101,25 @@ func (p *programHandler) Delete(param string) string {
 
 	return handlers.NewResponse().Ok("")
 }
+
+func (p *programHandler) Update(param string) string {
+	var program types.Program
+
+	byted := []byte(param)
+
+	byted = bytes.Trim(byted, "\x00")
+
+	err := json.Unmarshal(byted, &program)
+
+	if err != nil {
+		return handlers.NewResponse().BadRequest(err.Error())
+	}
+
+	result := p.programUsecase.Update(program)
+
+	if result != nil {
+		return handlers.NewResponse().BadRequest("Program cannot be updated")
+	}
+
+	return handlers.NewResponse().Ok("")
+}

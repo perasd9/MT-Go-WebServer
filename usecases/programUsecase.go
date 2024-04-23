@@ -64,6 +64,28 @@ func (p *programUsecase) GetAllPrivatePrograms(param types.Program) []types.Prog
 }
 
 func (p *programUsecase) Delete(param int) {
-	p.activityRepository.Delete(param)
+	p.activityRepository.Delete(param, 0)
 	p.programRepository.Delete(param)
+}
+
+func (p *programUsecase) Update(param types.Program) error {
+	p.programRepository.Update(param)
+
+	var result error
+
+	for _, value := range param.ListaAktivnosti {
+		if value.IsDeleted {
+			p.activityRepository.Delete(value.ProgramId, value.Rb)
+		}
+		if value.IsAdded {
+			value.ProgramId = param.ProgramId
+
+			result = p.activityRepository.Add(value)
+			if result != nil {
+				p.programRepository.Rollback()
+				return result
+			}
+		}
+	}
+	return result
 }

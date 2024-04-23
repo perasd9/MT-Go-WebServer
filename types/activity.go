@@ -20,4 +20,6 @@ type Activity struct {
 
 	//string helper
 	TipAktivnosti string `gorm:"column:activityType" json:"activityType"`
+	IsDeleted     bool   `gorm:"-" json:"isDeleted"`
+	IsAdded       bool   `gorm:"-" json:"isAdded"`
 }

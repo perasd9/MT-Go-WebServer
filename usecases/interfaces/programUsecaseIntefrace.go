@@ -7,4 +7,5 @@ type ProgramUsecase interface {
 	GetAll(string) []types.Program
 	GetAllPrivatePrograms(parm types.Program) []types.Program
 	Delete(param int)
+	Update(param types.Program) error
 }
